@@ -59,6 +59,14 @@ If you only want to calculate and display the correlation and draw a similar gra
 ```{r}
 source("install_dependencies.R")
 
+# 检查并安装 KMsurv（survMisc 的依赖）
+# Check and install KMsurv (dependency of survMisc)
+if (!requireNamespace("KMsurv", quietly = TRUE)) {
+  cat("KMsurv 包未安装，正在自动安装...\n")
+  cat("KMsurv package not installed, installing automatically...\n")
+  install.packages("KMsurv", repos = "https://cloud.r-project.org/")
+}
+
 library(TCGAbiolinks) # Download data
 library(survival) # Calculate survdiff
 library(survMisc) # Calculate cutoff
