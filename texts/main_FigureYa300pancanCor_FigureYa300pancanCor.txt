@@ -8,7 +8,7 @@ Author(s)
 Reviewer(s)
 : Ying Ge, Yasi Zhang
 Date
-: 2025-11-22
+: 2025-11-23
 1
 Academic Citation
 If you use this code in your work or research, we kindly request that
@@ -35,25 +35,24 @@ scenarios
 在泛癌中计算某感兴趣得分并计算该得分与几种致癌通路的相关性。
 可以用FigureYa实现例文多个Figure，例如：
 Figure 1A，可参考FigureYa31lasso
-Figure 2，FigureYa291PancanProgSigature
-已复现。泛癌中计算某感兴趣得分并计算该得分与预后的相关性；绘制得分分布于预后散点图。
+Figure 2A，FigureYa291PancanProgSigature 已复现
 Figure 2CDE、3、6BCDE，可参考FigureYa35batch_bestSeparation
 Figure 4AB，可参考FigureYa30
 Figure 4C，可参考FigureYa85timeROC
 Figure 4D，可参考FigureYa33DCA
+Figure 5，FigureYa300pancanCor 已复现
 Calculate a score of interest across pan-cancer and assess its
 correlation with several oncogenic pathways.
 FigureYa can be used to create multiple figures as shown in the
 example article, such as:
-Figure 1A, refer to FigureYa31lasso:
-Figure 2, reproduced in FigureYa291PancanProgSignature: . Calculate
-a score of interest across pan-cancer and evaluate its correlation with
-prognosis; plot score distribution and prognostic scatter plots.
-Figures 2CDE, 3, and 6BCDE, refer to
-FigureYa35batch_bestSeparation:
-Figures 4AB, refer to FigureYa30:
-Figure 4C, refer to FigureYa85timeROC:
-Figure 4D, refer to FigureYa33DCA:
+Figure 1A, refer to FigureYa31lasso
+Figure 2A, reproduced in FigureYa291PancanProgSignature
+Figure 2CDE, Figure 3, and Figure 6BCDE, refer to
+FigureYa35batch_bestSeparation
+Figure 4AB, refer to FigureYa30
+Figure 4C, refer to FigureYa85timeROC
+Figure 4D, refer to FigureYa33DCA
+Figure 5, refer to FigureYa300pancanCor
 4
 环境设置 Environment
 Setup
@@ -66,6 +65,7 @@ library
 # 画图 Plotting
 library
 (data.table)
+# 数据处理 Data Table Manipulation
 library
 (cowplot)
 # 拼图 Combining figures
@@ -80,7 +80,7 @@ library
 # 模拟设计 Simulation design
 library
 (tidyr)
-# 数据整理 Data整理
+# 数据整理 Data tidying
 # 显示英文报错信息
 # Show English error messages
 Sys.setenv
