@@ -368,3 +368,4 @@ ggsave("PCA_B_ori.pdf", width = 7, height = 4)
 
 ```{r}
 sessionInfo()
+```
