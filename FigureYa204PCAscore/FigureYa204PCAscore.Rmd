@@ -2,6 +2,7 @@
 title: "FigureYa204PCAscore"
 params:
   author: "Xiaofan Lu"
+  reviewers: "Ying Ge, Hui Huang"
 output: 
   html_document:
     toc: true
@@ -11,10 +12,10 @@ output:
     theme: flatly
     highlight: tango
     code_folding: show
-reviewers: Ying Ge,Hui Huang
 ---
 
 **Author(s)**: `r params$author`  
+**Reviewers**: `r params$reviewers`  
 **Date**: `r Sys.Date()`  
 
 ## Academic Citation
@@ -26,43 +27,36 @@ Xiaofan Lu, et al. (2025). FigureYa: A Standardized Visualization Framework for 
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# 需求描述
+## 需求描述 Requirement Description
 
 想实现下这个文章的建模方法，不同于常规的lasso, cox回归系数与基因表达量的乘积，这篇文章采用Boruta降维，联合主成分分析第一主成分构建 signature score，特别适合做分子分型分析。
-
-# Requirement Description
 
 I want to try the modeling method of this article, which is different from the conventional lasso, the product of the cox regression coefficient and the gene expression, this article uses Boruta to reduce the dimension and combine the principal component analysis with the first principal component to construct a signature score, which is especially suitable for molecular typing analysis.
 
 ![](method.png)
 
-出自<https://www.cell.com/molecular-therapy-family/nucleic-acids/fulltext/S2162-2531(20)30259-6>
-from<https://www.cell.com/molecular-therapy-family/nucleic-acids/fulltext/S2162-2531(20)30259-6>
+From <https://www.cell.com/molecular-therapy-family/nucleic-acids/fulltext/S2162-2531(20)30259-6>
 
-# 应用场景
+## 应用场景 Application Scenarios
 
 根据Figure201ClusterCorrelation得到的亚型以及ICI signature结果，进一步利用Boruta算法对AB签名降维，并利用PCA计算单样本ICI得分。
 
-# Application Scenarios
-
 According to the isoforms obtained by Figure201ClusterCorrelation and the ICI signature results, the Boruta algorithm was used to reduce the dimensionality of AB signatures, and the single-sample ICI score was calculated by PCA.
 
-# 环境设置
-
-# Environment settings
+## 环境设置 Environment settings
 
 ```{r}
 source("install_dependencies.R")
 
-library(Boruta)
-library(ggplot2)
-library(ggpubr)
-library(pheatmap)
+library(Boruta) # Boruta降维 # Boruta dimensionality reduction
+library(ggplot2) # 画图 # Plotting
+library(ggpubr) # 画图增强 # Plotting enhancement
+library(pheatmap) # 热图 # Heatmap
 Sys.setenv(LANGUAGE = "en") #显示英文报错信息 # Display English error messages
 options(stringsAsFactors = FALSE) #禁止chr转成factor # Prohibit converting chr to factor
 ```
 
-# 输入文件
+## 输入文件 Input Files 
 
 easy_input_expr.txt，表达矩阵，这里与原文保持一致，用了TPM，也可以用FPKM。FigureYa201ClusterCorrelation的输入文件是FPKM，同样也可以用TPM。
 
@@ -70,7 +64,6 @@ easy_input_cluster.txt，把Figure201ClusterCorrelation获得的亚型信息（C
 
 ouput_ICIsignatureGene.txt，Figure201ClusterCorrelation的ICI signature gene结果。
 
-# Input Files
 easy_input_expr.txt, the expression matrix, which is consistent with the original text, uses TPM, and FPKM can also be used. The input file of FigureYa201ClusterCorrelation is FPKM, and TPM can also be used.
 
 easy_input_cluster.txt, write the subtype information obtained by Figure201ClusterCorrelation (in the ConsensusCluster folder, ConsensusCluster.k=X.consensusClass.csv the cluster corresponding to the number of samples under each category) in the cluster column. The rest is sample information, which is the same as the 'easy_input_sinfo.txt' file of FigureYa201ClusterCorrelation.
@@ -94,17 +87,13 @@ outTab <- read.table("ouput_ICIsignatureGene.txt",sep = "\t",row.names = NULL,he
 table(outTab$direct) # AB两种签名按相关性正负来分类，正相关标为A，否则标为B # The two types of signatures are classified according to the positive and negative correlations, and the positive correlation is marked as A, otherwise it is marked as B
 ```
 
-# 用Boruta对ICI signature降维 
+## 用Boruta对ICI signature降维 Use Boruta to reduce the dimensionality of the ICI signature
 
 这一步原则上是应该把AB两种签名一起来构建预后签名的。但这套数据情况特殊，因此遇到了问题（负相关结果被淹没），因此我们拆开A、B签名，分开降维。
 
-## 原则上：一起构建预后签名
-
-# Use Boruta to reduce the dimensionality of the ICI signature
-
 In principle, this step should combine the two signatures of AB to construct the prognostic signature. However, this set of data is a special case, so we have encountered a problem (the negative correlation results are drowned out), so we take apart the A and B signatures and reduce the dimensionality separately.
 
-## In principle: build prognostic signatures together
+### 原则上：一起构建预后签名 In principle: build prognostic signatures together
 
 ```{r}
 set.seed(20201024)
@@ -142,8 +131,7 @@ How to address this?
 
 The original paper does not specify a detailed approach. To ensure an adequate representation of negatively correlated genes, I separated Signatures A and B and performed dimensionality reduction independently. This prevents the negative correlation gene set from being too sparse.
 
-## 灵活处理：拆开A、B签名，分开降维
-## Flexible processing: Disassemble A and B signatures and reduce dimensionality separately
+### 灵活处理：拆开A、B签名，分开降维 Flexible processing: Disassemble A and B signatures and reduce dimensionality separately
 ```{r}
 # 提取A签名
 # Extract A signature
@@ -180,8 +168,7 @@ ncol(dat.boruta)
 nrow(boruta.B)
 ```
 
-# 用降维后的签名画热图
-# Draw a heatmap with the dimensionally reduced signature
+## 用降维后的签名画热图 Draw a heatmap with the dimensionally reduced signature
 ```{r}
 annRow <- data.frame("ICI signature gene" = rep(c("A","B"), c(nrow(boruta.A), nrow(boruta.B))),
                      row.names = c(boruta.A$gene,boruta.B$gene),
@@ -212,8 +199,7 @@ dev.copy2pdf(file = "heatmap_dimension_reduced.pdf", width = 10, height = 8) # �
 
 Compare the 'heatmap_dimension_reduced.pdf' here with the 'ClusterCorrelation.pdf' of FigureYa201ClusterCorrelation to see the effect before and after dimensionality reduction.
 
-# 联合主成分分析第一主成分计算ICI得分
-# Combined principal component analysis (PCA) first principal component to calculate the ICI score
+## 联合主成分分析第一主成分计算ICI得分 Combined principal component analysis (PCA) first principal component to calculate the ICI score
 ```{r}
 # 在“输入文件”那里，已经做过z-score处理，因此这里不再进行标准化
 # In the "Input File" section, the z-score has already been processed, so it is no longer normalized here
@@ -237,11 +223,9 @@ ICI.outtab <- data.frame(samID = rownames(annCol),
 write.table(ICI.outtab,"output_ICI_score.txt",sep = "\t",row.names = F,col.names = T,quote = F)
 ```
 
-# 画图对比ABC三类的ICI score
+## 画图对比ABC三类的ICI score Draw and compare the ICI scores of the three types of ABC
 
 参考FigureYa162boxViolin的画法
-
-# Draw and compare the ICI scores of the three types of ABC
 
 Refer to FigureYa162boxViolin's drawing method
 
