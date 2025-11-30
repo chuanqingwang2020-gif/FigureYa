@@ -43,6 +43,10 @@ From <https://www.cell.com/molecular-therapy-family/nucleic-acids/fulltext/S2162
 
 According to the isoforms obtained by Figure201ClusterCorrelation and the ICI signature results, the Boruta algorithm was used to reduce the dimensionality of AB signatures, and the single-sample ICI score was calculated by PCA.
 
+用于分子分型，用 PC1 将样本分为高/低两组，后面可以再验证两组的生存、免疫特征差异。
+
+Used for molecular typing, using PC1 to divide samples into high/low groups, and then verify the survival and immune characteristics of the two groups.
+
 ## 环境设置 Environment settings
 
 ```{r}
