@@ -96,7 +96,7 @@ data2[
 6
 开始画图 Start
 drawing
-7
+6.1
 方法一:
 调用factoextra包 Method 1: Call the factoextra package
 p
@@ -198,7 +198,7 @@ ggsave
 (
 "PCA_factoextra.pdf"
 )
-7.1
+6.2
 方法二: ggplot Method
 2: ggplot
 data.use
@@ -380,7 +380,7 @@ ggsave
 (
 "PCA_ggplot2.pdf"
 )
-8
+7
 Session Info
 sessionInfo
 ()
